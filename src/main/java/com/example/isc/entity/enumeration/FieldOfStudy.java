@@ -1,4 +1,4 @@
-package com.example.isc.entity;
+package com.example.isc.entity.enumeration;
 
 public enum FieldOfStudy {
     MECHANICAL_ENGINEERING,

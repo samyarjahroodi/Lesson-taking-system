@@ -19,6 +19,9 @@ public class Student_Course extends BaseEntity<Integer> {
     @ManyToOne(cascade = CascadeType.ALL)
     private Course course;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Teacher teacher;
+
     private int mark;
 
     private int term;

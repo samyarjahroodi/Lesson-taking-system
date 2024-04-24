@@ -1,4 +1,4 @@
-package com.example.isc.entity;
+package com.example.isc.entity.enumeration;
 
 public enum Role {
     ROLE_ADMIN,

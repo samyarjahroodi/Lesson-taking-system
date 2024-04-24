@@ -16,8 +16,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @Service
 public class TeacherServiceImpl
-    extends UserServiceImpl<Teacher,TeacherRepository>
-        implements TeacherService , BaseService<Teacher,Integer> {
+        extends UserServiceImpl<Teacher, TeacherRepository>
+        implements TeacherService {
     private final TeacherRepository teacherRepository;
 
     public TeacherServiceImpl(TeacherRepository repository, BCryptPasswordEncoder passwordEncoder, TeacherRepository teacherRepository) {

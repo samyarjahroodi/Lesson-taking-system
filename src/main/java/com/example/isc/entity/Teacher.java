@@ -1,9 +1,11 @@
 package com.example.isc.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.example.isc.entity.enumeration.FieldOfStudy;
+import com.example.isc.entity.enumeration.TeacherDegree;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,11 +13,18 @@ import lombok.*;
 @Setter
 @Entity
 @ToString
-public class Teacher extends User{
+public class Teacher extends User {
 
     private String teacherId;
 
     @Enumerated(EnumType.STRING)
     private FieldOfStudy fieldOfStudy;
+
+    @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Student_Course> student_courses;
+
+    @Enumerated(EnumType.STRING)
+    private TeacherDegree teacherDegree;
 
 }

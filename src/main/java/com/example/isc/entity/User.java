@@ -1,5 +1,6 @@
 package com.example.isc.entity;
 
+import com.example.isc.entity.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
