@@ -29,12 +29,12 @@ public class Course extends BaseEntity<Integer> {
     @ToString.Exclude
     private List<Teacher> teachers;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+ /*   @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "course_student",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     @ToString.Exclude
-    private List<Student> students;
+    private List<Student> students;*/
 }

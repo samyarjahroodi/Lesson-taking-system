@@ -10,9 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Entity
-@Table(name = "\"user\"")
+@MappedSuperclass
 public class User extends BaseEntity<Integer> {
 
     private String firstname;
