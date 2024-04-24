@@ -11,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @Entity
 @ToString
-public class Admin extends User<Integer> {
+public class Admin extends User {
     private String adminCode;
-
 }

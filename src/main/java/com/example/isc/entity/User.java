@@ -1,26 +1,26 @@
 package com.example.isc.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.io.Serializable;
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@MappedSuperclass
-public class User<ID extends Serializable> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected ID id;
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Entity
+@Table(name = "\"user\"")
+public class User extends BaseEntity<Integer> {
 
     private String firstname;
 
     private String lastname;
 
-}
+    private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+}

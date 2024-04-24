@@ -9,21 +9,16 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @Entity
 @ToString
-public class Course {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+public class Course extends BaseEntity<Integer> {
+    private String name;
 
-    String name;
+    private String courseCode;
 
-    String courseCode;
-
-    int unit;
+    private int unit;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -32,7 +27,7 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "teacher_id")
     )
     @ToString.Exclude
-    List<Teacher> teachers;
+    private List<Teacher> teachers;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -41,5 +36,5 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     @ToString.Exclude
-    List<Student> students;
+    private List<Student> students;
 }

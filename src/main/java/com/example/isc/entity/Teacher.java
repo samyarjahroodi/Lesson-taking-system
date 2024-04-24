@@ -3,22 +3,20 @@ package com.example.isc.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-public class Teacher extends User<Integer> {
+@ToString
+public class Teacher extends User{
 
-    String teacherId;
+    private String teacherId;
 
     @Enumerated(EnumType.STRING)
-    FieldOfStudy fieldOfStudy;
+    private FieldOfStudy fieldOfStudy;
 
 }
