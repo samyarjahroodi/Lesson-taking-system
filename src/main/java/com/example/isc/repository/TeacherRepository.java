@@ -14,5 +14,6 @@ public interface TeacherRepository
     @Query("SELECT c FROM Course c JOIN c.teachers t WHERE t.teacherId = :teacherId")
     List<Course> getCourseList(@Param("teacherId") String teacherId);
 
-
+    @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Teacher t WHERE t.teacherId = :teacherId AND t.password = :password")
+    boolean signIn(@Param("teacherId") String teacherId, @Param("password") String password);
 }

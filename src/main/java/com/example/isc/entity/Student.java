@@ -12,6 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Builder
 @ToString
 public class Student extends User {
     private String studentId;

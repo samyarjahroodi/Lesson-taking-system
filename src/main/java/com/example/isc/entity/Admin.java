@@ -3,6 +3,7 @@ package com.example.isc.entity;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,7 +11,10 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @Entity
+@SuperBuilder
 @ToString
 public class Admin extends User {
-    private String adminCode;
+    private String adminId;
+
+    private String username;
 }

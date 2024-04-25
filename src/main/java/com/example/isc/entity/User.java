@@ -2,15 +2,14 @@ package com.example.isc.entity;
 
 import com.example.isc.entity.enumeration.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @MappedSuperclass
 public class User extends BaseEntity<Integer> {
 
@@ -22,4 +21,10 @@ public class User extends BaseEntity<Integer> {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private boolean enabled = false;
+
+    private boolean isBlocked;
+
+    private boolean isExpired;
 }

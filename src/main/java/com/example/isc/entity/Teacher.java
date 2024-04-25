@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @Entity
 @ToString
+@Builder
 public class Teacher extends User {
 
     private String teacherId;
@@ -26,6 +27,7 @@ public class Teacher extends User {
 
 
     @ManyToMany(mappedBy = "teachers")
+    @ToString.Exclude
     private List<Course> courses;
 
     @Enumerated(EnumType.STRING)

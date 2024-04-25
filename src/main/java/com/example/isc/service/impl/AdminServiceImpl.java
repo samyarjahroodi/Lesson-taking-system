@@ -1,9 +1,11 @@
 package com.example.isc.service.impl;
 
 import com.example.isc.entity.Admin;
+import com.example.isc.entity.enumeration.Role;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.AdminRepository;
 import com.example.isc.service.AdminService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
@@ -12,9 +14,31 @@ import java.util.Optional;
 public class AdminServiceImpl
         extends UserServiceImpl<Admin, AdminRepository>
         implements AdminService {
+    private final AdminRepository adminRepository;
 
-    public AdminServiceImpl(AdminRepository repository, BCryptPasswordEncoder passwordEncoder) {
+    public AdminServiceImpl(AdminRepository repository, BCryptPasswordEncoder passwordEncoder, AdminRepository adminRepository) {
         super(repository, passwordEncoder);
+        this.adminRepository = adminRepository;
+    }
+
+    @PostConstruct
+    public void createAdminWhenApplicationRuns() {
+        if (!adminRepository.existsByUsername("admin")) {
+            Admin adminUser = (Admin) Admin.builder()
+                    .username("admin")
+                    .role(Role.ROLE_ADMIN)
+                    .enabled(true)
+                    .password("adminpassword") // Set the password through User builder
+                    .build();
+
+            adminUser.setPassword(passwordEncoder.encode(adminUser.getPassword())); // Encode the password
+
+            adminRepository.save(adminUser);
+
+            System.out.println("Admin user created successfully.");
+        } else {
+            System.out.println("Admin user already exists.");
+        }
     }
 
     @Override

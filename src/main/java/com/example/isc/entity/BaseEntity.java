@@ -1,10 +1,7 @@
 package com.example.isc.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
@@ -14,7 +11,6 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 public class BaseEntity<ID extends Serializable> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

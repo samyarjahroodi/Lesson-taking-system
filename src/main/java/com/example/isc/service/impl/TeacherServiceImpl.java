@@ -6,7 +6,6 @@ import com.example.isc.entity.Student_Course;
 import com.example.isc.entity.Teacher;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.TeacherRepository;
-import com.example.isc.service.Student_CourseService;
 import com.example.isc.service.TeacherService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
