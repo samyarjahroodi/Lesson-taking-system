@@ -20,9 +20,13 @@ public class Teacher extends User {
     @Enumerated(EnumType.STRING)
     private FieldOfStudy fieldOfStudy;
 
-    @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Student_Course> student_courses;
+    private List<Student_Course> studentCourses;
+
+
+    @ManyToMany(mappedBy = "teachers")
+    private List<Course> courses;
 
     @Enumerated(EnumType.STRING)
     private TeacherDegree teacherDegree;

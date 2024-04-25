@@ -1,5 +1,6 @@
 package com.example.isc.service.impl;
 
+import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
 import com.example.isc.exception.NullInputException;
@@ -22,6 +23,21 @@ public class Student_CourseServiceImpl
     @Override
     public List<Student_Course> findAllByStudent(Student student) {
         return student_courseRepository.findAllByStudent(student);
+    }
+
+    @Override
+    public List<Course> findAllPassedCoursesByStudentId(String studentId) {
+        return student_courseRepository.findAllPassedCoursesByStudentId(studentId);
+    }
+
+    @Override
+    public List<Course> findAllNotPassedCoursesByStudentId(String studentId) {
+        return student_courseRepository.findAllNotPassedCoursesByStudentId(studentId);
+    }
+
+    @Override
+    public Student_Course findByStudentAndCourse(Student student, Course course) {
+        return student_courseRepository.findByStudentAndCourse(student, course);
     }
 
     @Override
