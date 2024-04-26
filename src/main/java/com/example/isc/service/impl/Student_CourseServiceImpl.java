@@ -9,12 +9,14 @@ import com.example.isc.service.BaseService;
 import com.example.isc.service.Student_CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class Student_CourseServiceImpl
         implements Student_CourseService, BaseService<Student_Course, Integer> {
     private final Student_CourseRepository student_courseRepository;
@@ -38,6 +40,11 @@ public class Student_CourseServiceImpl
     @Override
     public Student_Course findByStudentAndCourse(Student student, Course course) {
         return student_courseRepository.findByStudentAndCourse(student, course);
+    }
+
+    @Override
+    public Student_Course findByStudentIdAndCourse(String studentId, Course course) {
+        return student_courseRepository.findByStudentIdAndCourse(studentId, course);
     }
 
     @Override

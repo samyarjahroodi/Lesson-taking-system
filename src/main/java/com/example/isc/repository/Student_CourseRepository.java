@@ -22,4 +22,7 @@ public interface Student_CourseRepository
 
     @Query("SELECT sc FROM Student_Course sc WHERE sc.students = :student AND sc.course = :course")
     Student_Course findByStudentAndCourse(@Param("student") Student student, @Param("course") Course course);
+
+    @Query("SELECT sc FROM Student_Course sc WHERE sc.students.id = :studentId AND sc.course = :course")
+    Student_Course findByStudentIdAndCourse(@Param("studentId") String studentId, @Param("course") Course course);
 }

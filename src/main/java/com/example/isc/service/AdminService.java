@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AdminService
-        extends BaseService<Admin,Integer> {
-
+        extends BaseService<Admin, Integer> {
+    boolean signIn(String username, String password);
 }

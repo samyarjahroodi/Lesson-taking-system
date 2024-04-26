@@ -16,4 +16,6 @@ public interface TeacherRepository
 
     @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Teacher t WHERE t.teacherId = :teacherId AND t.password = :password")
     boolean signIn(@Param("teacherId") String teacherId, @Param("password") String password);
+
+    boolean existsByTeacherIdAndPassword(String teacherId, String password);
 }

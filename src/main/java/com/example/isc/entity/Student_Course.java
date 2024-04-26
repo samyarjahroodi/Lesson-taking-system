@@ -3,12 +3,13 @@ package com.example.isc.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Builder
+@SuperBuilder
 @Setter
 @Entity
 @ToString
@@ -28,5 +29,7 @@ public class Student_Course extends BaseEntity<Integer> {
     private int term;
 
     private boolean isPass;
+
+    private boolean doesStudentReceive;
 
 }

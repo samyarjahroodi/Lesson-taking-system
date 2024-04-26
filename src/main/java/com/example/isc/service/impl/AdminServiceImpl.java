@@ -7,10 +7,14 @@ import com.example.isc.repository.AdminRepository;
 import com.example.isc.service.AdminService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional(readOnly = true)
+@Service
 public class AdminServiceImpl
         extends UserServiceImpl<Admin, AdminRepository>
         implements AdminService {
@@ -21,13 +25,19 @@ public class AdminServiceImpl
         this.adminRepository = adminRepository;
     }
 
+    @Override
+    public boolean signIn(String username, String password) {
+        return adminRepository.signIn(username, password);
+    }
+
+
     @PostConstruct
     public void createAdminWhenApplicationRuns() {
         if (!adminRepository.existsByUsername("admin")) {
-            Admin adminUser = (Admin) Admin.builder()
+            Admin adminUser = Admin.builder()
                     .username("admin")
                     .role(Role.ROLE_ADMIN)
-                    .enabled(true)
+                    .isEnabled(true)
                     .password("adminpassword") // Set the password through User builder
                     .build();
 
@@ -40,6 +50,7 @@ public class AdminServiceImpl
             System.out.println("Admin user already exists.");
         }
     }
+
 
     @Override
     public <S extends Admin> S save(S entity) {

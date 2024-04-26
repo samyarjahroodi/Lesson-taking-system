@@ -2,6 +2,8 @@ package com.example.isc.service;
 
 import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
+import com.example.isc.entity.Student_Course;
+import com.example.isc.service.dto.request.StudentDtoRequestForRegistration;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -16,5 +18,11 @@ public interface StudentService
     double findAverageMarksByStudentId(@Param("studentId") String studentId);
 
     List<Course> seePassesCoursesByStudentId(String studentId);
+
+    void deleteCurrentCourse(String studentId, Student_Course student_course);
+
+    boolean studentSignIn(String studentId, String password);
+
+    void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration);
 
 }

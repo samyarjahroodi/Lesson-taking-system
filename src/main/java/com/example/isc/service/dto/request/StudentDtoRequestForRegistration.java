@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TeacherDtoRequestForRegistration {
+public class StudentDtoRequestForRegistration {
     @NotBlank(message = "firstname cannot be blank")
     private String firstname;
 
@@ -25,6 +25,9 @@ public class TeacherDtoRequestForRegistration {
 
     @Email
     private String email;
+
+    @Pattern(regexp = "\\d{8}")
+    private String nationalId;
 
     private LocalDate creationDate = LocalDate.now();
 

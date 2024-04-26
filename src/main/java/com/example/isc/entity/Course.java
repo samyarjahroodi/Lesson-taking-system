@@ -2,6 +2,7 @@ package com.example.isc.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Setter
 @Entity
 @ToString
+@SuperBuilder
 public class Course extends BaseEntity<Integer> {
     private String name;
 

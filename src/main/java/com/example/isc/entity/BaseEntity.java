@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 @AllArgsConstructor
 public class BaseEntity<ID extends Serializable> {
     @Id

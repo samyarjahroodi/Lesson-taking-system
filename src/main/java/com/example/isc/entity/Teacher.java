@@ -4,6 +4,7 @@ import com.example.isc.entity.enumeration.FieldOfStudy;
 import com.example.isc.entity.enumeration.TeacherDegree;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Setter
 @Entity
 @ToString
-@Builder
+@SuperBuilder
 public class Teacher extends User {
 
     private String teacherId;

@@ -4,9 +4,11 @@ import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
 import com.example.isc.exception.DuplicateCourseException;
+import com.example.isc.exception.NotFoundException;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.StudentRepository;
 import com.example.isc.service.StudentService;
+import com.example.isc.service.dto.request.StudentDtoRequestForRegistration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,7 @@ public class StudentServiceImpl
     @Transactional
     public Set<Student_Course> addCourseToStudent(Student student, Course course) {
         validateStudentAndCourse(student, course);
+        validateStudentStatus(student);
 
         Student studentId = studentRepository.getReferenceById(Integer.valueOf(student.getStudentId()));
         List<Course> notPassedCourses = student_courseService.findAllNotPassedCoursesByStudentId(String.valueOf(studentId));
@@ -54,6 +57,18 @@ public class StudentServiceImpl
             }
         }
         return null;
+    }
+
+    private void validateStudentStatus(Student student) {
+        if (!student.isEnabled()) {
+            throw new IllegalArgumentException("Student is not enabled");
+        }
+        if (student.isExpired()) {
+            throw new IllegalArgumentException("Student is expired");
+        }
+        if (student.isBlocked()) {
+            throw new IllegalArgumentException("Student is blocked");
+        }
     }
 
     private int calculateTotalUnits(Set<Student_Course> studentCourses) {
@@ -79,6 +94,7 @@ public class StudentServiceImpl
         Student_Course studentCourse = new Student_Course();
         studentCourse.setCourse(course);
         studentCourse.setStudents(student);
+        studentCourse.setDoesStudentReceive(true);
         return studentCourse;
     }
 
@@ -107,6 +123,29 @@ public class StudentServiceImpl
     @Override
     public List<Course> seePassesCoursesByStudentId(String studentId) {
         return student_courseService.findAllPassedCoursesByStudentId(studentId);
+    }
+
+    @Override
+    public void deleteCurrentCourse(String studentId, Student_Course student_course) {
+        Student_Course existingStudentCourse = student_courseService.findByStudentIdAndCourse(studentId, student_course.getCourse());
+
+        if (existingStudentCourse != null && existingStudentCourse.equals(student_course)) {
+            if (!existingStudentCourse.isPass()) {
+                student_courseService.delete(existingStudentCourse);
+            }
+        } else {
+            throw new NotFoundException("Course not found");
+        }
+    }
+
+    @Override
+    public boolean studentSignIn(String studentId, String password) {
+        return studentRepository.signIn(studentId, password);
+    }
+
+    @Override
+    public void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration) {
+
     }
 
     @Override

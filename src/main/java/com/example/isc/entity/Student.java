@@ -4,6 +4,7 @@ import com.example.isc.entity.enumeration.FieldOfStudy;
 import com.example.isc.entity.enumeration.StudentDegree;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Builder
+@SuperBuilder
 @ToString
 public class Student extends User {
     private String studentId;
@@ -26,5 +27,7 @@ public class Student extends User {
     @OneToMany(mappedBy = "students", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<Student_Course> student_courses;
+
+
 
 }

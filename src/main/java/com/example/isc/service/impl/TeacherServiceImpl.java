@@ -4,15 +4,20 @@ import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
 import com.example.isc.entity.Teacher;
+import com.example.isc.exception.ExpireDateException;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.TeacherRepository;
 import com.example.isc.service.TeacherService;
+import com.example.isc.service.dto.request.TeacherDtoRequestForRegistration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 
 @Transactional(readOnly = true)
@@ -30,6 +35,15 @@ public class TeacherServiceImpl
         this.student_courseService = student_courseService;
     }
 
+    public static String createRandomTeacherId() {
+        String teacherId;
+        do {
+            UUID uuid = UUID.randomUUID();
+            String randomId = uuid.toString().replace("-", "");
+            teacherId = "00" + randomId.substring(0, 6); // Adjust the substring length as needed
+        } while (!Pattern.matches("00[0-9]{6}", teacherId));
+        return teacherId;
+    }
 
     public void giveMarkToStudent(Student student, Course course, int mark, int term) {
         Student_Course studentCourse = student_courseService.findByStudentAndCourse(student, course);
@@ -43,6 +57,39 @@ public class TeacherServiceImpl
         }
     }
 
+
+    public boolean checkTeacherStatus(Teacher teacher) {
+        return teacher.isEnabled() && !teacher.isBlocked() && !teacher.isExpired();
+    }
+
+
+    @Override
+    public boolean signInForTeacher(String teacherId, String password) {
+        return teacherRepository.existsByTeacherIdAndPassword(teacherId, password);
+    }
+
+    @Override
+    @Transactional
+    public void teacherRegistration(TeacherDtoRequestForRegistration dto) {
+        Teacher teacher = Teacher.builder()
+                .firstname(dto.getFirstname())
+                .lastname(dto.getLastname())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .email(dto.getEmail())
+                .isEnabled(false)
+                .teacherId(createRandomTeacherId())
+                .build();
+
+
+        teacherRepository.save(teacher);
+    }
+
+    public boolean checkIfTeacherIsNotExpired(Teacher teacher) {
+        if (LocalDate.now().isAfter(teacher.getCreationDate().plusYears(4))) {
+            throw new ExpireDateException("Teacher's creation date is expired");
+        }
+        return true;
+    }
 
     @Override
     public <S extends Teacher> S save(S entity) {

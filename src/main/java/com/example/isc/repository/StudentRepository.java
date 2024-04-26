@@ -15,4 +15,5 @@ public interface StudentRepository
     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END FROM Student s WHERE s.studentId = :teacherId AND s.password = :password")
     boolean signIn(@Param("teacherId") String studentId, @Param("password") String password);
 
+
 }
