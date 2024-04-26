@@ -1,6 +1,8 @@
 package com.example.isc.service.impl;
 
 import com.example.isc.entity.Admin;
+import com.example.isc.entity.Student;
+import com.example.isc.entity.Teacher;
 import com.example.isc.entity.enumeration.Role;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.AdminRepository;
@@ -19,15 +21,36 @@ public class AdminServiceImpl
         extends UserServiceImpl<Admin, AdminRepository>
         implements AdminService {
     private final AdminRepository adminRepository;
+    private final StudentServiceImpl studentService;
+    private final TeacherServiceImpl teacherService;
 
-    public AdminServiceImpl(AdminRepository repository, BCryptPasswordEncoder passwordEncoder, AdminRepository adminRepository) {
+    public AdminServiceImpl(AdminRepository repository, BCryptPasswordEncoder passwordEncoder, AdminRepository adminRepository, StudentServiceImpl studentService, TeacherServiceImpl teacherService) {
         super(repository, passwordEncoder);
         this.adminRepository = adminRepository;
+        this.studentService = studentService;
+        this.teacherService = teacherService;
     }
 
     @Override
     public boolean signIn(String username, String password) {
         return adminRepository.signIn(username, password);
+    }
+
+    @Override
+    @Transactional
+    public void enableStudent(String studentId) {
+        Student student = studentService.findByStudentId(studentId);
+        student.setEnabled(true);
+        studentService.save(student);
+
+    }
+
+    @Override
+    @Transactional
+    public void enableTeacher(String teacherId) {
+        Teacher teacher = teacherService.findByTeacherId(teacherId);
+        teacher.setEnabled(true);
+        teacherService.save(teacher);
     }
 
 

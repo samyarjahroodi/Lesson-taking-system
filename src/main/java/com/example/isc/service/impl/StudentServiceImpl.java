@@ -3,6 +3,7 @@ package com.example.isc.service.impl;
 import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
+import com.example.isc.entity.enumeration.Role;
 import com.example.isc.exception.DuplicateCourseException;
 import com.example.isc.exception.NotFoundException;
 import com.example.isc.exception.NullInputException;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Transactional(readOnly = true)
 @Service
@@ -32,14 +35,9 @@ public class StudentServiceImpl
         this.student_courseService = student_courseService;
     }
 
-    public void getCourse(Student student, Course course) {
-        if (checkIfStudentIsPassedACourse(student, course)) {
-            throw new DuplicateCourseException("duplicate course exception");
-        }
-    }
-
     @Transactional
     public Set<Student_Course> addCourseToStudent(Student student, Course course) {
+        checkIfStudentIsPassedACourse(student, course);
         validateStudentAndCourse(student, course);
         validateStudentStatus(student);
 
@@ -112,7 +110,7 @@ public class StudentServiceImpl
                 return true;
             }
         }
-        return false;
+        throw new DuplicateCourseException("Duplicate exception");
     }
 
     @Override
@@ -139,13 +137,43 @@ public class StudentServiceImpl
     }
 
     @Override
-    public boolean studentSignIn(String studentId, String password) {
-        return studentRepository.signIn(studentId, password);
+    @Transactional
+    public void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration) {
+        Student student = Student.builder()
+                .firstname(studentDtoRequestForRegistration.getFirstname())
+                .lastname(studentDtoRequestForRegistration.getLastname())
+                .password(passwordEncoder.encode(studentDtoRequestForRegistration.getPassword()))
+                .role(Role.ROLE_STUDENT)
+                .email(studentDtoRequestForRegistration.getEmail())
+                .nationalId(studentDtoRequestForRegistration.getNationalId())
+                .isEnabled(false)
+                .isBlocked(false)
+                .isExpired(false)
+                .studentId(createRandomTeacherId())
+                .educationDegree(studentDtoRequestForRegistration.getEducationDegree())
+                .fieldOfStudy(studentDtoRequestForRegistration.getFieldOfStudy())
+                .build();
+        studentRepository.save(student);
     }
 
     @Override
-    public void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration) {
+    public Student findByStudentId(String studentId) {
+        return findByStudentId(studentId);
+    }
 
+    private String createRandomTeacherId() {
+        String studentId;
+        do {
+            UUID uuid = UUID.randomUUID();
+            String randomId = uuid.toString().replace("-", "");
+            studentId = "01" + randomId.substring(0, 6); // Adjust the substring length as needed
+        } while (!Pattern.matches("00[0-9]{6}", studentId));
+        return studentId;
+    }
+
+    @Override
+    public boolean studentSignIn(String studentId, String password) {
+        return studentRepository.signIn(studentId, password);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
 import com.example.isc.entity.Teacher;
+import com.example.isc.entity.enumeration.Role;
 import com.example.isc.exception.ExpireDateException;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.TeacherRepository;
@@ -35,7 +36,7 @@ public class TeacherServiceImpl
         this.student_courseService = student_courseService;
     }
 
-    public static String createRandomTeacherId() {
+    private String createRandomTeacherId() {
         String teacherId;
         do {
             UUID uuid = UUID.randomUUID();
@@ -47,6 +48,7 @@ public class TeacherServiceImpl
 
     public void giveMarkToStudent(Student student, Course course, int mark, int term) {
         Student_Course studentCourse = student_courseService.findByStudentAndCourse(student, course);
+        checkTeacherStatus(studentCourse.getTeacher());
         if (studentCourse != null) {
             studentCourse.setMark(mark);
             studentCourse.setTerm(term);
@@ -74,14 +76,22 @@ public class TeacherServiceImpl
         Teacher teacher = Teacher.builder()
                 .firstname(dto.getFirstname())
                 .lastname(dto.getLastname())
+                .role(Role.ROLE_TEACHER)
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .email(dto.getEmail())
                 .isEnabled(false)
+                .isBlocked(false)
+                .isExpired(false)
                 .teacherId(createRandomTeacherId())
                 .build();
 
 
         teacherRepository.save(teacher);
+    }
+
+    @Override
+    public Teacher findByTeacherId(String teacherId) {
+        return repository.findByTeacherId(teacherId);
     }
 
     public boolean checkIfTeacherIsNotExpired(Teacher teacher) {

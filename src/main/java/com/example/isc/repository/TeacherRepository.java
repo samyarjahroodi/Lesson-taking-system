@@ -18,4 +18,7 @@ public interface TeacherRepository
     boolean signIn(@Param("teacherId") String teacherId, @Param("password") String password);
 
     boolean existsByTeacherIdAndPassword(String teacherId, String password);
+
+    Teacher findByTeacherId(String teacherId);
+
 }

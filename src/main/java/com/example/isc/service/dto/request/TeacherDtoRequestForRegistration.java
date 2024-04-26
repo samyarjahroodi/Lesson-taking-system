@@ -1,7 +1,10 @@
 package com.example.isc.service.dto.request;
 
+import com.example.isc.entity.enumeration.FieldOfStudy;
+import com.example.isc.entity.enumeration.TeacherDegree;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -28,4 +31,12 @@ public class TeacherDtoRequestForRegistration {
 
     private LocalDate creationDate = LocalDate.now();
 
+    @NotNull
+    private String nationalId;
+
+    @NotNull
+    private FieldOfStudy fieldOfStudy;
+
+    @NotNull
+    private TeacherDegree teacherDegree;
 }

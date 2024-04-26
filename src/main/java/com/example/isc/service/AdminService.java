@@ -7,4 +7,9 @@ import org.springframework.stereotype.Service;
 public interface AdminService
         extends BaseService<Admin, Integer> {
     boolean signIn(String username, String password);
+
+    void enableStudent(String studentId);
+
+    void enableTeacher(String teacherId);
+
 }

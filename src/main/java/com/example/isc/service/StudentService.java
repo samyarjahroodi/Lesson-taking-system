@@ -25,4 +25,7 @@ public interface StudentService
 
     void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration);
 
+    Student findByStudentId(String studentId);
+
+
 }

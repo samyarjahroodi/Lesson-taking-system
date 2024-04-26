@@ -9,11 +9,13 @@ import java.util.List;
 
 @Service
 public interface TeacherService
-        extends BaseService<Teacher,Integer> {
+        extends BaseService<Teacher, Integer> {
     List<Course> getCourseList(String teacherId);
 
     boolean signInForTeacher(String teacherId, String password);
 
     void teacherRegistration(TeacherDtoRequestForRegistration dto);
+
+    Teacher findByTeacherId(String teacherId);
 
 }
