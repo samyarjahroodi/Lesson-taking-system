@@ -40,4 +40,7 @@ public class StudentDtoRequestForRegistration {
     @NotNull
     private FieldOfStudy fieldOfStudy;
 
+    @NotNull
+    private String username;
+
 }

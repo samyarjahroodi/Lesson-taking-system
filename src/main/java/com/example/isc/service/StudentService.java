@@ -21,8 +21,6 @@ public interface StudentService
 
     void deleteCurrentCourse(String studentId, Student_Course student_course);
 
-    boolean studentSignIn(String studentId, String password);
-
     void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration);
 
     Student findByStudentId(String studentId);

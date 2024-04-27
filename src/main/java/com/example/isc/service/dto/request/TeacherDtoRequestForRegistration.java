@@ -39,4 +39,7 @@ public class TeacherDtoRequestForRegistration {
 
     @NotNull
     private TeacherDegree teacherDegree;
+
+    @NotNull
+    private String username;
 }

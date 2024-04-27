@@ -136,7 +136,6 @@ public class StudentServiceImpl
         }
     }
 
-    @Override
     @Transactional
     public void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration) {
         Student student = Student.builder()
@@ -169,11 +168,6 @@ public class StudentServiceImpl
             studentId = "01" + randomId.substring(0, 6); // Adjust the substring length as needed
         } while (!Pattern.matches("00[0-9]{6}", studentId));
         return studentId;
-    }
-
-    @Override
-    public boolean studentSignIn(String studentId, String password) {
-        return studentRepository.signIn(studentId, password);
     }
 
     @Override

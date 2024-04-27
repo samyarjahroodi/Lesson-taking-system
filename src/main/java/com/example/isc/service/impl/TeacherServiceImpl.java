@@ -66,11 +66,6 @@ public class TeacherServiceImpl
 
 
     @Override
-    public boolean signInForTeacher(String teacherId, String password) {
-        return teacherRepository.existsByTeacherIdAndPassword(teacherId, password);
-    }
-
-    @Override
     @Transactional
     public void teacherRegistration(TeacherDtoRequestForRegistration dto) {
         Teacher teacher = Teacher.builder()

@@ -8,6 +8,7 @@ import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.AdminRepository;
 import com.example.isc.service.AdminService;
 import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 @Service
+@Primary
 public class AdminServiceImpl
         extends UserServiceImpl<Admin, AdminRepository>
         implements AdminService {
@@ -29,11 +31,6 @@ public class AdminServiceImpl
         this.adminRepository = adminRepository;
         this.studentService = studentService;
         this.teacherService = teacherService;
-    }
-
-    @Override
-    public boolean signIn(String username, String password) {
-        return adminRepository.signIn(username, password);
     }
 
     @Override

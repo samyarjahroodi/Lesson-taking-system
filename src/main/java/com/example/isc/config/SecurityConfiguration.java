@@ -1,6 +1,8 @@
 package com.example.isc.config;
 
 
+import com.example.isc.entity.User;
+import com.example.isc.exception.NotFoundException;
 import com.example.isc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final UserService userService;
+    private final UserService<User> userService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Bean
