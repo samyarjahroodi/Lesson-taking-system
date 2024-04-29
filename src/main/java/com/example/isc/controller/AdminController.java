@@ -26,18 +26,17 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/enable-teacher")
     public ResponseEntity<HttpStatus> enableTeacher(@RequestParam String teacherId) {
         adminService.enableTeacher(teacherId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/add-course")
     public ResponseEntity<CourseDtoResponse> addCourse(@RequestBody @Valid CourseDtoRequest courseDtoRequest) {
         Course course = CourseMapper.INSTANCE.requestDtoToModel(courseDtoRequest);
         adminService.addCourse(course);
-        CourseDtoResponse courseDtoResponse
-                = CourseMapper.INSTANCE.modelToDto(course);
+        CourseDtoResponse courseDtoResponse = CourseMapper.INSTANCE.modelToDto(course);
         return new ResponseEntity<>(courseDtoResponse, HttpStatus.CREATED);
     }
 

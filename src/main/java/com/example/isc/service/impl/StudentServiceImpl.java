@@ -4,7 +4,6 @@ import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
 import com.example.isc.entity.enumeration.Role;
-import com.example.isc.exception.DuplicateException;
 import com.example.isc.exception.NotFoundException;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.StudentRepository;
@@ -34,7 +33,9 @@ public class StudentServiceImpl
 
     @Override
     public Set<Student_Course> addCourseToStudent(Student student, Course course) {
-        checkIfStudentIsPassedACourse(student, course);
+        if (checkIfStudentIsPassedACourse(student, course)) {
+            throw new IllegalArgumentException("Student already passed this course");
+        }
         validateStudentAndCourse(student, course);
         validateStudentStatus(student);
 
@@ -47,6 +48,7 @@ public class StudentServiceImpl
         if (notPassedCourses.isEmpty()) {
             Student_Course studentCourse = createStudentCourse(student, course);
             student_courseService.save(studentCourse);
+            return Collections.singleton(studentCourse);
         } else {
             int totalUnits = calculateTotalUnits(studentCourses);
             int unitLimit = calculateUnitLimit(findAverageMarksByStudentId(student));
@@ -58,7 +60,6 @@ public class StudentServiceImpl
             }
             return studentCourses;
         }
-        return studentCourses;
     }
 
     private void validateStudentStatus(Student student) {

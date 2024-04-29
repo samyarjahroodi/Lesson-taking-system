@@ -5,7 +5,6 @@ import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Teacher;
 import com.example.isc.entity.enumeration.Role;
-import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.AdminRepository;
 import com.example.isc.service.AdminService;
 import jakarta.annotation.PostConstruct;
@@ -13,8 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Service

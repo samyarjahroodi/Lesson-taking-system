@@ -1,10 +1,8 @@
 package com.example.isc.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 
 @AllArgsConstructor
 @NoArgsConstructor

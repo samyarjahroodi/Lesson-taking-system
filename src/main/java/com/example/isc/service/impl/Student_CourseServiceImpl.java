@@ -3,7 +3,6 @@ package com.example.isc.service.impl;
 import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
-import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.Student_CourseRepository;
 import com.example.isc.service.Student_CourseService;
 import lombok.RequiredArgsConstructor;

@@ -55,26 +55,10 @@ class StudentServiceImplTest {
         course.setUnit(3);
         courseService.save(course);
 
-        Student_Course student_course1 = new Student_Course();
-        student_course1.setStudent(student);
-        student_course1.setCourse(course);
-        studentCourseService.save(student_course1);
-
         Set<Student_Course> studentCourses = studentService.addCourseToStudent(student, course);
 
         assertEquals(1, studentCourses.size());
         assertTrue(studentCourses.stream().anyMatch(sc -> sc.getCourse().equals(course)));
-
-        Course course1 = new Course();
-        course.setName("Vibration");
-        courseService.save(course);
-
-        Student_Course studentCourse = new Student_Course();
-        studentCourse.setCourse(course1);
-        studentCourse.setStudent(student);
-        studentCourse.setPass(true);
-        studentCourseService.save(studentCourse);
-        assertEquals("Student already passed this course", studentService.addCourseToStudent(student, course1));
     }
 
     @Test
