@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class CourseServiceImpl
         implements CourseService, BaseService<Course,Integer> {
@@ -58,5 +58,10 @@ public class CourseServiceImpl
     @Override
     public Course getReferenceById(Integer integer) {
         return courseRepository.findById(integer).orElseThrow(() -> new NullInputException("null"));
+    }
+
+    @Override
+    public Course findByName(String name) {
+        return courseRepository.findByName(name);
     }
 }

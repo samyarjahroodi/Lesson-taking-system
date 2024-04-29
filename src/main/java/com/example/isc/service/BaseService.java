@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public interface BaseService<T extends BaseEntity<Integer>,ID extends Serializable> {
     <S extends T> S save(S entity);
 

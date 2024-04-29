@@ -9,7 +9,6 @@ import com.example.isc.exception.ExpireDateException;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.TeacherRepository;
 import com.example.isc.service.TeacherService;
-import com.example.isc.service.dto.request.TeacherDtoRequestForRegistration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class TeacherServiceImpl
         extends UserServiceImpl<Teacher, TeacherRepository>
@@ -66,23 +65,17 @@ public class TeacherServiceImpl
 
 
     @Override
-    @Transactional
-    public void teacherRegistration(TeacherDtoRequestForRegistration dto) {
-        Teacher teacher = Teacher.builder()
-                .firstname(dto.getFirstname())
-                .lastname(dto.getLastname())
-                .role(Role.ROLE_TEACHER)
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .email(dto.getEmail())
-                .isEnabled(false)
-                .isBlocked(false)
-                .isExpired(false)
-                .teacherId(createRandomTeacherId())
-                .build();
-
-
+    public Teacher teacherRegistration(Teacher teacher) {
+        checkUsernameAndEmailForRegistration(teacher);
+        teacher.setPassword(passwordEncoder.encode(teacher.getPassword()));
+        teacher.setRole(Role.ROLE_TEACHER);
+        teacher.setBlocked(false);
+        teacher.setExpired(false);
         teacherRepository.save(teacher);
+        return teacher;
     }
+
+
 
     @Override
     public Teacher findByTeacherId(String teacherId) {

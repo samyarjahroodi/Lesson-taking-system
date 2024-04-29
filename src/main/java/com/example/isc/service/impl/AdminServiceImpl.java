@@ -16,9 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional(readOnly = true)
+@Transactional
 @Service
-@Primary
 public class AdminServiceImpl
         extends UserServiceImpl<Admin, AdminRepository>
         implements AdminService {
@@ -51,6 +50,8 @@ public class AdminServiceImpl
     }
 
 
+
+
     @PostConstruct
     public void createAdminWhenApplicationRuns() {
         if (!adminRepository.existsByUsername("admin")) {
@@ -58,10 +59,10 @@ public class AdminServiceImpl
                     .username("admin")
                     .role(Role.ROLE_ADMIN)
                     .isEnabled(true)
-                    .password("adminpassword") // Set the password through User builder
+                    .password("adminpassword")
                     .build();
 
-            adminUser.setPassword(passwordEncoder.encode(adminUser.getPassword())); // Encode the password
+            adminUser.setPassword(passwordEncoder.encode(adminUser.getPassword()));
 
             adminRepository.save(adminUser);
 

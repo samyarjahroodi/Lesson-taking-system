@@ -15,16 +15,16 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public class Student_Course extends BaseEntity<Integer> {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Student students;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Course course;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Teacher teacher;
 
-    private int mark;
+    private double mark;
 
     private int term;
 

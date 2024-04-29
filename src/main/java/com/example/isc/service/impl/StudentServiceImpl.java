@@ -4,12 +4,12 @@ import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
 import com.example.isc.entity.enumeration.Role;
-import com.example.isc.exception.DuplicateCourseException;
+import com.example.isc.exception.DuplicateException;
 import com.example.isc.exception.NotFoundException;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.StudentRepository;
 import com.example.isc.service.StudentService;
-import com.example.isc.service.dto.request.StudentDtoRequestForRegistration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +20,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-@Transactional(readOnly = true)
+@Transactional
 @Service
+@Primary
 public class StudentServiceImpl
         extends UserServiceImpl<Student, StudentRepository>
         implements StudentService {
@@ -35,22 +36,21 @@ public class StudentServiceImpl
         this.student_courseService = student_courseService;
     }
 
-    @Transactional
+
     public Set<Student_Course> addCourseToStudent(Student student, Course course) {
         checkIfStudentIsPassedACourse(student, course);
         validateStudentAndCourse(student, course);
         validateStudentStatus(student);
 
-        Student studentId = studentRepository.getReferenceById(Integer.valueOf(student.getStudentId()));
-        List<Course> notPassedCourses = student_courseService.findAllNotPassedCoursesByStudentId(String.valueOf(studentId));
+        List<Student_Course> notPassedCourses = student_courseService.findAllNotPassedCoursesByStudent(student);
         Set<Student_Course> studentCourses = student.getStudent_courses();
         int totalUnits = calculateTotalUnits(studentCourses);
 
-        int unitLimit = calculateUnitLimit(findAverageMarksByStudentId(String.valueOf(studentId)));
+        int unitLimit = calculateUnitLimit(findAverageMarksByStudentId(student));
 
-        for (Course c : notPassedCourses) {
+        for (Student_Course c : notPassedCourses) {
             if (isEligibleToAddCourse(c, studentCourses, totalUnits, unitLimit)) {
-                Student_Course studentCourse = createStudentCourse(student, c);
+                Student_Course studentCourse = createStudentCourse(student, c.getCourse());
                 student_courseService.save(studentCourse);
             }
         }
@@ -83,9 +83,9 @@ public class StudentServiceImpl
         }
     }
 
-    private boolean isEligibleToAddCourse(Course course, Set<Student_Course> studentCourses, int totalUnits, int unitLimit) {
-        return !studentCourses.stream().anyMatch(rc -> rc.getCourse().equals(course)) &&
-                (totalUnits + course.getUnit()) <= unitLimit;
+    private boolean isEligibleToAddCourse(Student_Course student_course, Set<Student_Course> studentCourses, int totalUnits, int unitLimit) {
+        return !studentCourses.stream().anyMatch(rc -> rc.getCourse().equals(student_course)) &&
+                (totalUnits + student_course.getCourse().getUnit()) <= unitLimit;
     }
 
     private Student_Course createStudentCourse(Student student, Course course) {
@@ -104,28 +104,30 @@ public class StudentServiceImpl
 
     @Override
     public boolean checkIfStudentIsPassedACourse(Student student, Course course) {
-        List<Student_Course> studentCourses = student_courseService.findAllByStudent(student);
-        for (Student_Course studentCourse : studentCourses) {
+        List<Student_Course> allPassedCoursesByStudentId
+                = student_courseService.findAllPassedCoursesByStudent(student);
+        for (Student_Course studentCourse : allPassedCoursesByStudentId) {
             if (studentCourse.getCourse().equals(course) && studentCourse.isPass()) {
                 return true;
             }
         }
-        throw new DuplicateCourseException("Duplicate exception");
+        return false;
     }
 
     @Override
-    public double findAverageMarksByStudentId(String studentId) {
-        return studentRepository.findAverageMarksByStudentId(studentId);
+    public double findAverageMarksByStudentId(Student student) {
+        return studentRepository.findAverageMarksByStudentId(student);
     }
 
     @Override
-    public List<Course> seePassesCoursesByStudentId(String studentId) {
-        return student_courseService.findAllPassedCoursesByStudentId(studentId);
+    public List<Student_Course> seePassesCoursesByStudentId(Student student) {
+        return student_courseService.findAllPassedCoursesByStudent(student);
     }
 
     @Override
-    public void deleteCurrentCourse(String studentId, Student_Course student_course) {
-        Student_Course existingStudentCourse = student_courseService.findByStudentIdAndCourse(studentId, student_course.getCourse());
+    public void deleteCurrentCourse(Student student, Student_Course student_course) {
+        Student_Course existingStudentCourse
+                = student_courseService.findByStudentAndCourse(student, student_course.getCourse());
 
         if (existingStudentCourse != null && existingStudentCourse.equals(student_course)) {
             if (!existingStudentCourse.isPass()) {
@@ -137,35 +139,28 @@ public class StudentServiceImpl
     }
 
     @Transactional
-    public void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration) {
-        Student student = Student.builder()
-                .firstname(studentDtoRequestForRegistration.getFirstname())
-                .lastname(studentDtoRequestForRegistration.getLastname())
-                .password(passwordEncoder.encode(studentDtoRequestForRegistration.getPassword()))
-                .role(Role.ROLE_STUDENT)
-                .email(studentDtoRequestForRegistration.getEmail())
-                .nationalId(studentDtoRequestForRegistration.getNationalId())
-                .isEnabled(false)
-                .isBlocked(false)
-                .isExpired(false)
-                .studentId(createRandomTeacherId())
-                .educationDegree(studentDtoRequestForRegistration.getEducationDegree())
-                .fieldOfStudy(studentDtoRequestForRegistration.getFieldOfStudy())
-                .build();
+    @Override
+    public Student studentRegistration(Student student) {
+        checkUsernameAndEmailForRegistration(student);
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
+        student.setRole(Role.ROLE_STUDENT);
+        student.setBlocked(false);
+        student.setExpired(false);
         studentRepository.save(student);
+        return student;
     }
 
     @Override
     public Student findByStudentId(String studentId) {
-        return findByStudentId(studentId);
+        return repository.findByStudentId(studentId);
     }
 
-    private String createRandomTeacherId() {
+    private String createRandomStudentId() {
         String studentId;
         do {
             UUID uuid = UUID.randomUUID();
             String randomId = uuid.toString().replace("-", "");
-            studentId = "01" + randomId.substring(0, 6); // Adjust the substring length as needed
+            studentId = "01" + randomId.substring(0, 6);
         } while (!Pattern.matches("00[0-9]{6}", studentId));
         return studentId;
     }

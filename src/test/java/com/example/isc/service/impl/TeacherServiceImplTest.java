@@ -1,11 +1,9 @@
 package com.example.isc.service.impl;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
 
-@DataJpaTest
-/*@ComponentScan(basePackages = "com.example.isc")*/
+import static org.junit.jupiter.api.Assertions.*;
+
 class TeacherServiceImplTest {
 
     @Test

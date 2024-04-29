@@ -1,13 +1,14 @@
 package com.example.isc.repository;
 
 import com.example.isc.entity.Admin;
+import com.example.isc.entity.Student;
 import com.example.isc.entity.Teacher;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
 @Repository
 public interface AdminRepository
         extends UserRepository<Admin> {
@@ -16,10 +17,8 @@ public interface AdminRepository
 
     boolean existsByUsername(String username);
 
-    @Query("SELECT t from Teacher t")
-    List<Teacher> findAllTeachers();
+/*    List<Teacher> findAllByT();
 
-    @Query("SELECT s from Student s")
-    List<Teacher> findAllStudents();
+    List<Student> findAllStudents();*/
 
 }

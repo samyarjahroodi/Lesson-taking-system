@@ -9,21 +9,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface StudentService
         extends BaseService<Student, Integer> {
 
     boolean checkIfStudentIsPassedACourse(Student student, Course course);
 
-    double findAverageMarksByStudentId(@Param("studentId") String studentId);
+    double findAverageMarksByStudentId(Student student);
 
-    List<Course> seePassesCoursesByStudentId(String studentId);
+    List<Student_Course> seePassesCoursesByStudentId(Student student);
 
-    void deleteCurrentCourse(String studentId, Student_Course student_course);
-
-    void studentRegistration(StudentDtoRequestForRegistration studentDtoRequestForRegistration);
+    void deleteCurrentCourse(Student student, Student_Course student_course);
 
     Student findByStudentId(String studentId);
+
+    Student studentRegistration(Student student);
 
 
 }

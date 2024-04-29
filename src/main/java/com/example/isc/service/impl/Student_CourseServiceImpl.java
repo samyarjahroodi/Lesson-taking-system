@@ -5,7 +5,6 @@ import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.Student_CourseRepository;
-import com.example.isc.service.BaseService;
 import com.example.isc.service.Student_CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,25 +15,26 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class Student_CourseServiceImpl
-        implements Student_CourseService, BaseService<Student_Course, Integer> {
+        implements Student_CourseService {
     private final Student_CourseRepository student_courseRepository;
 
 
+
     @Override
-    public List<Student_Course> findAllByStudent(Student student) {
+    public List<Student_Course> findAllCoursesByStudent(Student student) {
         return student_courseRepository.findAllByStudent(student);
     }
 
     @Override
-    public List<Course> findAllPassedCoursesByStudentId(String studentId) {
-        return student_courseRepository.findAllPassedCoursesByStudentId(studentId);
+    public List<Student_Course> findAllPassedCoursesByStudent(Student student) {
+        return student_courseRepository.findAllPassedCoursesByStudent(student);
     }
 
     @Override
-    public List<Course> findAllNotPassedCoursesByStudentId(String studentId) {
-        return student_courseRepository.findAllNotPassedCoursesByStudentId(studentId);
+    public List<Student_Course> findAllNotPassedCoursesByStudent(Student student) {
+        return student_courseRepository.findAllNotPassedCoursesByStudent(student);
     }
 
     @Override
@@ -43,11 +43,7 @@ public class Student_CourseServiceImpl
     }
 
     @Override
-    public Student_Course findByStudentIdAndCourse(String studentId, Course course) {
-        return student_courseRepository.findByStudentIdAndCourse(studentId, course);
-    }
-
-    @Override
+    @Transactional
     public <S extends Student_Course> S save(S entity) {
         return student_courseRepository.save(entity);
     }

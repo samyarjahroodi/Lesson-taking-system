@@ -8,14 +8,12 @@ import java.util.List;
 
 public interface Student_CourseService
         extends BaseService<Student_Course, Integer> {
-    List<Student_Course> findAllByStudent(Student student);
+    List<Student_Course> findAllCoursesByStudent(Student student);
 
-    List<Course> findAllPassedCoursesByStudentId(String studentId);
+    List<Student_Course> findAllPassedCoursesByStudent(Student student);
 
-    List<Course> findAllNotPassedCoursesByStudentId(String studentId);
+    List<Student_Course> findAllNotPassedCoursesByStudent(Student student);
 
     Student_Course findByStudentAndCourse(Student student, Course course);
-
-    Student_Course findByStudentIdAndCourse(String studentId, Course course);
 
 }
