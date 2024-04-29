@@ -2,7 +2,6 @@ package com.example.isc.service;
 
 
 import com.example.isc.entity.BaseEntity;
-import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;

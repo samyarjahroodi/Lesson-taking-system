@@ -6,8 +6,6 @@ import com.example.isc.entity.Student_Course;
 import com.example.isc.entity.Teacher;
 import com.example.isc.entity.enumeration.Role;
 import com.example.isc.exception.ExpireDateException;
-import com.example.isc.exception.NullInputException;
-import com.example.isc.repository.Student_CourseRepository;
 import com.example.isc.repository.TeacherRepository;
 import com.example.isc.service.TeacherService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -97,46 +95,6 @@ public class TeacherServiceImpl
             throw new ExpireDateException("Teacher's creation date is expired");
         }
         return true;
-    }
-
-    @Override
-    public <S extends Teacher> S save(S entity) {
-        return teacherRepository.save(entity);
-    }
-
-    @Override
-    public Optional<Teacher> findById(Integer id) {
-        return teacherRepository.findById(id);
-    }
-
-    @Override
-    public List<Teacher> findAll() {
-        return teacherRepository.findAll();
-    }
-
-    @Override
-    public List<Teacher> findAllById(Iterable<Integer> id) {
-        return teacherRepository.findAllById(id);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        teacherRepository.deleteById(id);
-    }
-
-    @Override
-    public void delete(Teacher entity) {
-        teacherRepository.delete(entity);
-    }
-
-    @Override
-    public void deleteAll() {
-        teacherRepository.deleteAll();
-    }
-
-    @Override
-    public Teacher getReferenceById(Integer id) {
-        return teacherRepository.findById(id).orElseThrow(() -> new NullInputException("null"));
     }
 
     @Override

@@ -43,44 +43,42 @@ public class Student_CourseServiceImpl
     }
 
     @Override
-    @Transactional
     public <S extends Student_Course> S save(S entity) {
-        return student_courseRepository.save(entity);
+        return null;
     }
 
     @Override
-    public Optional<Student_Course> findById(Integer id) {
-        return student_courseRepository.findById(id);
+    public Optional<Student_Course> findById(Integer integer) {
+        return Optional.empty();
     }
 
     @Override
     public List<Student_Course> findAll() {
-        return student_courseRepository.findAll();
+        return null;
     }
 
     @Override
-    public List<Student_Course> findAllById(Iterable<Integer> id) {
-        return student_courseRepository.findAllById(id);
+    public List<Student_Course> findAllById(Iterable<Integer> integers) {
+        return null;
     }
 
     @Override
-    public void deleteById(Integer id) {
-        student_courseRepository.deleteById(id);
+    public void deleteById(Integer integer) {
+
     }
 
     @Override
     public void delete(Student_Course entity) {
-        student_courseRepository.delete(entity);
+
     }
 
     @Override
     public void deleteAll() {
-        student_courseRepository.deleteAll();
+
     }
 
     @Override
-    public Student_Course getReferenceById(Integer id) {
-        return student_courseRepository.findById(id).orElseThrow(() -> new NullInputException("null"));
-
+    public Student_Course getReferenceById(Integer integer) {
+        return null;
     }
 }

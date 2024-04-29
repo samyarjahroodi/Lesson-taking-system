@@ -1,7 +1,6 @@
 package com.example.isc.config;
 
 
-import com.example.isc.entity.User;
 import com.example.isc.exception.NotFoundException;
 import com.example.isc.service.UserService;
 import lombok.RequiredArgsConstructor;

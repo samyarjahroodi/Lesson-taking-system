@@ -1,8 +1,8 @@
 package com.example.isc.service;
 
 import com.example.isc.entity.Course;
+import com.example.isc.entity.Student;
 import com.example.isc.entity.Teacher;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,5 +14,9 @@ public interface TeacherService
     Teacher teacherRegistration(Teacher teacher);
 
     Teacher findByTeacherId(String teacherId);
+
+    void giveMarkToStudent(Student student, Course course, double mark, int term);
+
+    boolean checkTeacherStatus(Teacher teacher);
 
 }

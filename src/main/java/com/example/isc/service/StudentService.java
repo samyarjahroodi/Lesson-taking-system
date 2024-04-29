@@ -3,11 +3,9 @@ package com.example.isc.service;
 import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
-import com.example.isc.service.dto.request.StudentDtoRequestForRegistration;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 
 public interface StudentService
@@ -24,6 +22,8 @@ public interface StudentService
     Student findByStudentId(String studentId);
 
     Student studentRegistration(Student student);
+
+    Set<Student_Course> addCourseToStudent(Student student, Course course);
 
 
 }

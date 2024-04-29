@@ -26,14 +26,13 @@ public class StudentServiceImpl
     private final StudentRepository studentRepository;
     private final Student_CourseServiceImpl student_courseService;
 
-
     public StudentServiceImpl(StudentRepository repository, BCryptPasswordEncoder passwordEncoder, StudentRepository studentRepository, Student_CourseServiceImpl student_courseService) {
         super(repository, passwordEncoder);
         this.studentRepository = studentRepository;
         this.student_courseService = student_courseService;
     }
 
-
+    @Override
     public Set<Student_Course> addCourseToStudent(Student student, Course course) {
         checkIfStudentIsPassedACourse(student, course);
         validateStudentAndCourse(student, course);
@@ -150,7 +149,7 @@ public class StudentServiceImpl
         checkUsernameAndEmailForRegistration(student);
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setRole(Role.ROLE_STUDENT);
-        student.setStudentId(createRandomStudentId());
+        /*    student.setStudentId(createRandomStudentId());*/
         student.setBlocked(false);
         student.setExpired(false);
         studentRepository.save(student);
@@ -172,43 +171,4 @@ public class StudentServiceImpl
         return studentId;
     }
 
-    @Override
-    public <S extends Student> S save(S entity) {
-        return studentRepository.save(entity);
-    }
-
-    @Override
-    public Optional<Student> findById(Integer id) {
-        return studentRepository.findById(id);
-    }
-
-    @Override
-    public List<Student> findAll() {
-        return studentRepository.findAll();
-    }
-
-    @Override
-    public List<Student> findAllById(Iterable<Integer> id) {
-        return studentRepository.findAllById(id);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        studentRepository.deleteById(id);
-    }
-
-    @Override
-    public void delete(Student entity) {
-        studentRepository.delete(entity);
-    }
-
-    @Override
-    public void deleteAll() {
-        studentRepository.deleteAll();
-    }
-
-    @Override
-    public Student getReferenceById(Integer id) {
-        return studentRepository.findById(id).orElseThrow(() -> new NullInputException("null"));
-    }
 }

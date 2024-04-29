@@ -1,8 +1,6 @@
 package com.example.isc.service.impl;
 
 import com.example.isc.entity.Course;
-import com.example.isc.entity.Student;
-import com.example.isc.entity.enumeration.Role;
 import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.CourseRepository;
 import com.example.isc.service.BaseService;
