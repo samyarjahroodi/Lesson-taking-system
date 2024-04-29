@@ -12,16 +12,16 @@ import java.util.List;
 @Repository
 public interface Student_CourseRepository
         extends JpaRepository<Student_Course, Integer> {
-    @Query("SELECT sc FROM Student_Course sc WHERE sc.students = :student")
+    @Query("SELECT sc FROM Student_Course sc WHERE sc.student = :student")
     List<Student_Course> findAllByStudent(Student student);
 
-    @Query("SELECT sc FROM Student_Course sc WHERE sc.students = :student AND sc.isPass = true")
+    @Query("SELECT sc FROM Student_Course sc WHERE sc.student = :student AND sc.isPass = true")
     List<Student_Course> findAllPassedCoursesByStudent(Student student);
 
-    @Query("SELECT sc FROM Student_Course sc WHERE sc.students = :student AND sc.isPass = false")
+    @Query("SELECT sc FROM Student_Course sc WHERE sc.student = :student AND sc.isPass = false")
     List<Student_Course> findAllNotPassedCoursesByStudent(Student student);
 
-    @Query("SELECT sc FROM Student_Course sc WHERE sc.students = :student AND sc.course = :course")
+    @Query("SELECT sc FROM Student_Course sc WHERE sc.student = :student AND sc.course = :course")
     Student_Course findByStudentAndCourse(@Param("student") Student student, @Param("course") Course course);
 
 }

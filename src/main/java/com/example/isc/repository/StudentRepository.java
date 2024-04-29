@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface StudentRepository extends UserRepository<Student> {
 
-    @Query("SELECT AVG(sc.mark) FROM Student_Course sc WHERE sc.students = :student")
+    @Query("SELECT AVG(sc.mark) FROM Student_Course sc WHERE sc.student = :student")
     Double findAverageMarksByStudentId(Student student);
 
     Student findByStudentId(String studentId);

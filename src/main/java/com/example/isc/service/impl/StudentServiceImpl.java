@@ -91,8 +91,8 @@ public class StudentServiceImpl
     private Student_Course createStudentCourse(Student student, Course course) {
         Student_Course studentCourse = new Student_Course();
         studentCourse.setCourse(course);
-        studentCourse.setStudents(student);
-        studentCourse.setDoesStudentReceive(true);
+        studentCourse.setStudent(student);
+        studentCourse.setCurrentCourse(true);
         return studentCourse;
     }
 

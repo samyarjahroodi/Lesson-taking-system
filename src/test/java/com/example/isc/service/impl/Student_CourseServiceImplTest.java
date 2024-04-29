@@ -53,7 +53,7 @@ class Student_CourseServiceImplTest {
         courseService.save(course);
 
         Student_Course student_course = new Student_Course();
-        student_course.setStudents(student);
+        student_course.setStudent(student);
         student_course.setCourse(course);
 
 
@@ -81,7 +81,7 @@ class Student_CourseServiceImplTest {
         courseService.save(course);
 
         Student_Course studentCourse = new Student_Course();
-        studentCourse.setStudents(samyar);
+        studentCourse.setStudent(samyar);
         studentCourse.setCourse(course);
         studentCourse.setPass(true);
         student_courseService.save(studentCourse);

@@ -7,6 +7,7 @@ import com.example.isc.entity.Teacher;
 import com.example.isc.entity.enumeration.Role;
 import com.example.isc.exception.ExpireDateException;
 import com.example.isc.exception.NullInputException;
+import com.example.isc.repository.Student_CourseRepository;
 import com.example.isc.repository.TeacherRepository;
 import com.example.isc.service.TeacherService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,7 +30,8 @@ public class TeacherServiceImpl
     private final Student_CourseServiceImpl student_courseService;
 
 
-    public TeacherServiceImpl(TeacherRepository repository, BCryptPasswordEncoder passwordEncoder, TeacherRepository teacherRepository, Student_CourseServiceImpl student_courseService) {
+    public TeacherServiceImpl(TeacherRepository repository, BCryptPasswordEncoder passwordEncoder,
+                              TeacherRepository teacherRepository, Student_CourseServiceImpl student_courseService) {
         super(repository, passwordEncoder);
         this.teacherRepository = teacherRepository;
         this.student_courseService = student_courseService;
@@ -45,14 +47,22 @@ public class TeacherServiceImpl
         return teacherId;
     }
 
-    public void giveMarkToStudent(Student student, Course course, int mark, int term) {
+
+    @Transactional
+    public void giveMarkToStudent(Student student, Course course, double mark, int term) {
         Student_Course studentCourse = student_courseService.findByStudentAndCourse(student, course);
         checkTeacherStatus(studentCourse.getTeacher());
+        if (mark > 20 && term < 1) {
+            throw new IllegalArgumentException("Mark must be between 0 and 20 Or term should be bigger than 1");
+        }
+
         if (studentCourse != null) {
             studentCourse.setMark(mark);
             studentCourse.setTerm(term);
             studentCourse.setPass(mark >= 10);
+            System.out.println("Before saving: " + studentCourse);
             student_courseService.save(studentCourse);
+            System.out.println("After saving: " + studentCourse);
         } else {
             throw new IllegalStateException("Student is not enrolled in the course");
         }
@@ -60,7 +70,7 @@ public class TeacherServiceImpl
 
 
     public boolean checkTeacherStatus(Teacher teacher) {
-        return teacher.isEnabled() && !teacher.isBlocked() && !teacher.isExpired();
+        return !teacher.isEnabled() && !teacher.isBlocked() && !teacher.isExpired();
     }
 
 
@@ -69,12 +79,12 @@ public class TeacherServiceImpl
         checkUsernameAndEmailForRegistration(teacher);
         teacher.setPassword(passwordEncoder.encode(teacher.getPassword()));
         teacher.setRole(Role.ROLE_TEACHER);
+        teacher.setTeacherId(createRandomTeacherId());
         teacher.setBlocked(false);
         teacher.setExpired(false);
         teacherRepository.save(teacher);
         return teacher;
     }
-
 
 
     @Override

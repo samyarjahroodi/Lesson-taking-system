@@ -74,6 +74,7 @@ public class AdminServiceImpl
 
 
     @Override
+    @Transactional
     public <S extends Admin> S save(S entity) {
         return repository.save(entity);
     }

@@ -1,14 +1,17 @@
 package com.example.isc.service.impl;
 
+
 import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Student_Course;
+import com.example.isc.entity.enumeration.Role;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
@@ -17,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ComponentScan(basePackages = "com.example.isc.")
-@Transactional
 class StudentServiceImplTest {
 
     @Autowired
@@ -29,9 +31,12 @@ class StudentServiceImplTest {
     @Autowired
     private Student_CourseServiceImpl studentCourseService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setUp() {
-        // Add setup code here if needed before each test method
+
     }
 
     @AfterEach
@@ -43,17 +48,34 @@ class StudentServiceImplTest {
     @Test
     void addCourseToStudent() {
         Student student = new Student();
-        student.setUsername("JohnDoe");
+        student.setUsername("Reza");
         studentService.save(student);
 
         Course course = new Course();
         course.setName("Mathematics");
+        course.setUnit(3);
         courseService.save(course);
+
+        Student_Course student_course1 = new Student_Course();
+        student_course1.setStudent(student);
+        student_course1.setCourse(course);
+        studentCourseService.save(student_course1);
 
         Set<Student_Course> studentCourses = studentService.addCourseToStudent(student, course);
 
         assertEquals(1, studentCourses.size());
         assertTrue(studentCourses.stream().anyMatch(sc -> sc.getCourse().equals(course)));
+
+        Course course1 = new Course();
+        course.setName("Vibration");
+        courseService.save(course);
+
+        Student_Course studentCourse = new Student_Course();
+        studentCourse.setCourse(course1);
+        studentCourse.setStudent(student);
+        studentCourse.setPass(true);
+        studentCourseService.save(studentCourse);
+        assertEquals("Student already passed this course", studentService.addCourseToStudent(student, course1));
     }
 
     @Test
@@ -67,7 +89,7 @@ class StudentServiceImplTest {
         courseService.save(course);
 
         Student_Course studentCourse = new Student_Course();
-        studentCourse.setStudents(student);
+        studentCourse.setStudent(student);
         studentCourse.setCourse(course);
         studentCourse.setPass(true);
         studentCourseService.save(studentCourse);
@@ -86,27 +108,63 @@ class StudentServiceImplTest {
         courseService.save(course);
 
         Student_Course studentCourse = new Student_Course();
-        studentCourse.setStudents(student);
+        studentCourse.setStudent(student);
         studentCourse.setCourse(course);
         studentCourse.setMark(12.3);
         studentCourse.setPass(true);
         studentCourseService.save(studentCourse);
 
-        assertEquals(12.3,studentService.findAverageMarksByStudentId(student));
+        assertEquals(12.3, studentService.findAverageMarksByStudentId(student));
     }
 
     @Test
     void deleteCurrentCourse() {
+        Student student = new Student();
+        student.setUsername("Reza");
+        studentService.save(student);
+
+        Course course = new Course();
+        course.setName("Physics");
+        courseService.save(course);
+
+        Student_Course studentCourse = new Student_Course();
+        studentCourse.setStudent(student);
+        studentCourse.setCourse(course);
+        studentCourse.setCurrentCourse(true);
+        studentCourse.setMark(12.3);
+        studentCourseService.save(studentCourse);
+
+
+        assertEquals(12.3, studentService.findAverageMarksByStudentId(student));
+
 
     }
 
     @Test
-    void studentRegistration() {
-        // Test implementation here
+    public void testStudentRegistration() {
+        Student student = new Student();
+        student.setUsername("samyar");
+        student.setPassword("testpassword");
+        student.setEmail("test@example.com");
+
+        Student registeredStudent = studentService.studentRegistration(student);
+
+        assertNotNull(registeredStudent);
+
+        assertTrue(passwordEncoder.matches("testpassword", registeredStudent.getPassword()));
+
+        assertEquals(Role.ROLE_STUDENT, registeredStudent.getRole());
+        assertFalse(registeredStudent.isBlocked());
+        assertFalse(registeredStudent.isExpired());
     }
 
     @Test
     void findByStudentId() {
-        // Test implementation here
+        Student student = new Student();
+        student.setStudentId("123");
+        student.setUsername("testStudent");
+        studentService.save(student);
+        Student foundStudent = studentService.findByStudentId("123");
+        assertEquals("testStudent", foundStudent.getUsername());
     }
 }

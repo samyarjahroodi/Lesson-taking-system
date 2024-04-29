@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class Student_Course extends BaseEntity<Integer> {
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    private Student students;
+    private Student student;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     private Course course;
@@ -30,6 +30,6 @@ public class Student_Course extends BaseEntity<Integer> {
 
     private boolean isPass;
 
-    private boolean doesStudentReceive;
+    private boolean currentCourse;
 
 }

@@ -24,7 +24,7 @@ public class Student extends User {
     @Enumerated(EnumType.STRING)
     private FieldOfStudy fieldOfStudy;
 
-    @OneToMany(mappedBy = "students", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<Student_Course> student_courses;
 

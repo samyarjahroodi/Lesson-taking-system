@@ -21,5 +21,4 @@ public interface UserRepository<T extends User>
 
     boolean existsByUsername(String username);
 
-
 }
