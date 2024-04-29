@@ -1,6 +1,7 @@
 package com.example.isc.service.impl;
 
 import com.example.isc.entity.Admin;
+import com.example.isc.entity.Course;
 import com.example.isc.entity.Student;
 import com.example.isc.entity.Teacher;
 import com.example.isc.entity.enumeration.Role;
@@ -8,7 +9,6 @@ import com.example.isc.exception.NullInputException;
 import com.example.isc.repository.AdminRepository;
 import com.example.isc.service.AdminService;
 import jakarta.annotation.PostConstruct;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,17 +19,19 @@ import java.util.Optional;
 @Transactional
 @Service
 public class AdminServiceImpl
-        extends UserServiceImpl<Admin, AdminRepository>
+        extends BaseUserServiceImpl<Admin, AdminRepository>
         implements AdminService {
     private final AdminRepository adminRepository;
     private final StudentServiceImpl studentService;
     private final TeacherServiceImpl teacherService;
+    private final CourseServiceImpl courseService;
 
-    public AdminServiceImpl(AdminRepository repository, BCryptPasswordEncoder passwordEncoder, AdminRepository adminRepository, StudentServiceImpl studentService, TeacherServiceImpl teacherService) {
+    public AdminServiceImpl(AdminRepository repository, BCryptPasswordEncoder passwordEncoder, AdminRepository adminRepository, StudentServiceImpl studentService, TeacherServiceImpl teacherService, CourseServiceImpl courseService) {
         super(repository, passwordEncoder);
         this.adminRepository = adminRepository;
         this.studentService = studentService;
         this.teacherService = teacherService;
+        this.courseService = courseService;
     }
 
     @Override
@@ -49,7 +51,9 @@ public class AdminServiceImpl
         teacherService.save(teacher);
     }
 
-
+    public void addCourse(Course course) {
+        courseService.courseRegistration(course);
+    }
 
 
     @PostConstruct
@@ -74,7 +78,6 @@ public class AdminServiceImpl
 
 
     @Override
-    @Transactional
     public <S extends Admin> S save(S entity) {
         return repository.save(entity);
     }

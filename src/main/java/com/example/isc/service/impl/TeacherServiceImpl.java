@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 @Transactional
 @Service
 public class TeacherServiceImpl
-        extends UserServiceImpl<Teacher, TeacherRepository>
+        extends BaseUserServiceImpl<Teacher, TeacherRepository>
         implements TeacherService {
     private final TeacherRepository teacherRepository;
     private final Student_CourseServiceImpl student_courseService;

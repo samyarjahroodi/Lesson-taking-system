@@ -14,17 +14,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Transactional
 @Service
 @Primary
 public class StudentServiceImpl
-        extends UserServiceImpl<Student, StudentRepository>
+        extends BaseUserServiceImpl<Student, StudentRepository>
         implements StudentService {
     private final StudentRepository studentRepository;
     private final Student_CourseServiceImpl student_courseService;
@@ -42,19 +39,27 @@ public class StudentServiceImpl
         validateStudentAndCourse(student, course);
         validateStudentStatus(student);
 
-        List<Student_Course> notPassedCourses = student_courseService.findAllNotPassedCoursesByStudent(student);
         Set<Student_Course> studentCourses = student.getStudent_courses();
-        int totalUnits = calculateTotalUnits(studentCourses);
-
-        int unitLimit = calculateUnitLimit(findAverageMarksByStudentId(student));
-
-        for (Student_Course c : notPassedCourses) {
-            if (isEligibleToAddCourse(c, studentCourses, totalUnits, unitLimit)) {
-                Student_Course studentCourse = createStudentCourse(student, c.getCourse());
-                student_courseService.save(studentCourse);
-            }
+        if (studentCourses == null) {
+            studentCourses = new HashSet<>();
         }
-        return null;
+
+        List<Student_Course> notPassedCourses = student_courseService.findAllNotPassedCoursesByStudent(student);
+        if (notPassedCourses.isEmpty()) {
+            Student_Course studentCourse = createStudentCourse(student, course);
+            student_courseService.save(studentCourse);
+        } else {
+            int totalUnits = calculateTotalUnits(studentCourses);
+            int unitLimit = calculateUnitLimit(findAverageMarksByStudentId(student));
+            for (Student_Course c : notPassedCourses) {
+                if (isEligibleToAddCourse(c, studentCourses, totalUnits, unitLimit)) {
+                    Student_Course studentCourse = createStudentCourse(student, c.getCourse());
+                    student_courseService.save(studentCourse);
+                }
+            }
+            return studentCourses;
+        }
+        return studentCourses;
     }
 
     private void validateStudentStatus(Student student) {
@@ -84,7 +89,7 @@ public class StudentServiceImpl
     }
 
     private boolean isEligibleToAddCourse(Student_Course student_course, Set<Student_Course> studentCourses, int totalUnits, int unitLimit) {
-        return !studentCourses.stream().anyMatch(rc -> rc.getCourse().equals(student_course)) &&
+        return studentCourses.stream().noneMatch(rc -> rc.getCourse().equals(student_course)) &&
                 (totalUnits + student_course.getCourse().getUnit()) <= unitLimit;
     }
 
@@ -93,6 +98,7 @@ public class StudentServiceImpl
         studentCourse.setCourse(course);
         studentCourse.setStudent(student);
         studentCourse.setCurrentCourse(true);
+        student_courseService.save(studentCourse);
         return studentCourse;
     }
 
@@ -144,6 +150,7 @@ public class StudentServiceImpl
         checkUsernameAndEmailForRegistration(student);
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setRole(Role.ROLE_STUDENT);
+        student.setStudentId(createRandomStudentId());
         student.setBlocked(false);
         student.setExpired(false);
         studentRepository.save(student);

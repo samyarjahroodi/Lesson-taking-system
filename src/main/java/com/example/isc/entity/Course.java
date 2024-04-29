@@ -1,5 +1,6 @@
 package com.example.isc.entity;
 
+import com.example.isc.entity.enumeration.FieldOfStudy;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,9 +18,9 @@ import java.util.Set;
 public class Course extends BaseEntity<Integer> {
     private String name;
 
-    private String courseCode;
-
     private int unit;
+
+    private FieldOfStudy fieldOfStudy;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

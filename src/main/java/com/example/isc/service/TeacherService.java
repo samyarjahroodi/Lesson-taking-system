@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public interface TeacherService
-        extends BaseService<Teacher, Integer> {
+        extends BaseUserService<Teacher> {
     List<Course> getCourseList(String teacherId);
 
     Teacher teacherRegistration(Teacher teacher);
