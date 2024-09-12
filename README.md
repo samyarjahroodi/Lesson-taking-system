@@ -1,6 +1,6 @@
 
 Project Description:
-The project is an Information System for Courses (ISC) designed to manage student enrollments, course registrations, and teacher interactions within an educational institution. It provides functionalities for students, teachers, and administrators to interact with the system and perform various tasks related to course management.
+The Information System for Courses (ISC) project, developed by the ISC company, is designed to help interns gain a better understanding of application and database design. It manages student enrollments, course registrations, and teacher interactions within an educational institution. The system offers functionalities for students, teachers, and administrators to interact and perform various course management tasks.
 
 Features:
 
